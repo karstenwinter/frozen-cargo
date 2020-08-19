@@ -9,6 +9,7 @@ public class PlayerCharacter : MonoBehaviour
 	
 	public float moveSpeed=0.6f;
 	public float slowXwhenReleased=0.7f;
+	float rota;
 
 	public Transform GroundCheck;
 	float jumpTimeCounter;
@@ -22,14 +23,19 @@ public class PlayerCharacter : MonoBehaviour
 		var hor = Input.GetAxis("Horizontal");
 		var curHorMove = Mathf.Abs(rb.velocity.x);
 		var curVertMove = Mathf.Abs(rb.velocity.z);
+		
 		var vert = Input.GetAxis("Vertical");
-	
-		if(Mathf.Abs(hor) >= 0.01f||Mathf.Abs(vert) >= 0.01f)
+		rota += hor;
+
+		rb.rotation = Quaternion.Euler(0, rota, 0);
+
+		if(Mathf.Abs(vert) >= 0.01f)
 		{
-			rb.velocity -= Vector3.right*(moveSpeed-curHorMove)*hor;
-			rb.velocity -= Vector3.forward*(moveSpeed-curVertMove)*vert;
-		} else {
+			rb.AddForce(rb.rotation * Vector3.forward * moveSpeed * vert);
+			//rb.velocity += ;
+			//rb.velocity -= Vector3.forward*(moveSpeed-curVertMove)*vert;
+		}/* else {
 			rb.velocity = new Vector3(rb.velocity.x*slowXwhenReleased, rb.velocity.y, rb.velocity.z*slowXwhenReleased);
-		}
+		}*/
 	}
 }
